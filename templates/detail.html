@@ -1,0 +1,73 @@
+{% extends "layout.html" %}
+
+{% block body %}
+
+<!-- Page content-->
+        <div class="container mt-5">
+            <div class="row">
+                <div class="col-lg-8">
+                    <!-- Post content-->
+                    <article>
+                        <!-- Post header-->
+                        <header class="mb-4">
+                            <!-- Post title-->
+                            <h3 class="fw-bolder mb-1">{{article.title}}</h3>
+                            <!-- Post meta content-->
+                            <div class="text-muted fst-italic mb-2">{{article.created_date}}</div>
+                            <p class="lead">{{article.author}}</p>
+                            <hr>
+                        </header>
+                        <!-- Preview image figure-->
+                        {% if article.article_image %}
+                        <figure class="mb-4"><img class="img-fluid rounded" src="{{article.article_image.url}}" alt="..." /></figure>
+                        {% else %}
+                        {% endif %}
+                        <!-- Post content-->
+                        <section class="mb-5">
+                            <p class="fs-5 mb-4">{{article.content|safe}}</p>
+                        </section>
+
+                        <section class="mb-5">
+                            <div class="card bg-light">
+                                <div class="card-body">
+                                    <!-- Comment form-->
+                                    <form action = "{% url 'article:comment' article.id %}" method="POST">
+                                        {% csrf_token %}
+                                        <div class="form-group">
+                                            <label for="formGroupExampleInput">İsim</label>
+                                            <input name = "comment_author" type="text" class="form-control">                                        
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="formGroupExampleInput">Yorum</label>
+                                            <textarea name="comment_content" class="form-control" cols="30" rows="3"></textarea>                                     
+                                        </div>
+                                        <button type="Submit" class="btn btn-danger">Ekle</button>
+                                    </form>
+                                    
+                        </section>
+                        {% if comments %}
+                        {% for comment in comments %}
+                        <section class="mb-5">
+                        <div class="card bg-light">
+                            <div class="card-body">
+                                <div class="d-flex">
+                                    <div class="flex-shrink-0"><img class="rounded-circle" src="https://dummyimage.com/50x50/ced4da/6c757d.jpg" alt="..." /></div>
+                                    <div class="ms-3">
+                                        <div class="fw-bold">{{comment.comment_author}}</div>
+                                                {{comment.comment_date}}
+                                                <br>
+                                                {{comment.comment_content}}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                        {% else %}
+                        <div class="alert alert-danger">Yorum bulunmamaktadır.</div>
+                        {% endif %}
+                    </article>
+                </div>
+            </div>
+        </div>
+
+{% endblock body %}
